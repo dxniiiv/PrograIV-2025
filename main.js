@@ -4,16 +4,30 @@ createApp({
     data() {
         return {
             alumnos: [],
+            busqueda: '', 
             codigo: '',
             nombre: '',
-            direccion: '',
+            departamento: '',
+            municipio: '',
+            distrito: '',
             telefono: '',
-            email: ''
+            email: '',
+            fechaNacimiento: '',
+            sexo: ''
+        }
+    },
+    computed: {
+        alumnosFiltrados() {
+            return this.alumnos.filter(alumno => 
+                alumno.nombre.toLowerCase().includes(this.busqueda.toLowerCase()) ||
+                alumno.codigo.toLowerCase().includes(this.busqueda.toLowerCase()) ||
+                alumno.email.toLowerCase().includes(this.busqueda.toLowerCase())
+            );
         }
     },
     methods: {
         eliminarAlumno(alumno) {
-            if (confirm(`¿Esta seguro de eliminar el alumno ${alumno.nombre}?`)){
+            if (confirm(`¿Está seguro de eliminar el alumno ${alumno.nombre}?`)){
                 localStorage.removeItem(alumno.codigo);
                 this.listarAlumnos();
             }
@@ -21,17 +35,25 @@ createApp({
         verAlumno(alumno) {
             this.codigo = alumno.codigo;
             this.nombre = alumno.nombre;
-            this.direccion = alumno.direccion;
+            this.departamento = alumno.departamento;
+            this.municipio = alumno.municipio;
+            this.distrito = alumno.distrito;
             this.telefono = alumno.telefono;
             this.email = alumno.email;
+            this.fechaNacimiento = alumno.fechaNacimiento;
+            this.sexo = alumno.sexo;
         },
         guardarAlumno() {
             let alumno = {
                 codigo: this.codigo,
                 nombre: this.nombre,
-                direccion: this.direccion,
+                departamento: this.departamento,
+                municipio: this.municipio,
+                distrito: this.distrito,
                 telefono: this.telefono,
-                email: this.email
+                email: this.email,
+                fechaNacimiento: this.fechaNacimiento,
+                sexo: this.sexo
             };
             localStorage.setItem(this.codigo, JSON.stringify(alumno));
             this.listarAlumnos();
