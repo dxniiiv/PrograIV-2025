@@ -1,73 +1,75 @@
 const {createApp} = Vue;
+const Dexie = window.Dexie,
+    db = new Dexie('db_academico');
 
 createApp({
     data() {
         return {
+            buscar: '',
+            buscarTipo: 'nombre',
+            accion: 'nuevo',
             alumnos: [],
-            busqueda: '', 
+            idAlumno: '',
             codigo: '',
             nombre: '',
-            departamento: '',
-            municipio: '',
-            distrito: '',
+            direccion: '',
             telefono: '',
-            email: '',
-            fechaNacimiento: '',
-            sexo: ''
-        }
-    },
-    computed: {
-        alumnosFiltrados() {
-            return this.alumnos.filter(alumno => 
-                alumno.nombre.toLowerCase().includes(this.busqueda.toLowerCase()) ||
-                alumno.codigo.toLowerCase().includes(this.busqueda.toLowerCase()) ||
-                alumno.email.toLowerCase().includes(this.busqueda.toLowerCase())
-            );
+            email: ''
         }
     },
     methods: {
         eliminarAlumno(alumno) {
-            if (confirm(`¿Está seguro de eliminar el alumno ${alumno.nombre}?`)){
-                localStorage.removeItem(alumno.codigo);
+            if (confirm(`¿Esta seguro de eliminar el alumno ${alumno.nombre}?`)){
+                db.alumnos.delete(alumno.idAlumno);
                 this.listarAlumnos();
             }
         },
-        verAlumno(alumno) {
+        modificarAlumno(alumno) {
+            this.accion = 'modificar';
+            this.idAlumno = alumno.idAlumno;
             this.codigo = alumno.codigo;
             this.nombre = alumno.nombre;
-            this.departamento = alumno.departamento;
-            this.municipio = alumno.municipio;
-            this.distrito = alumno.distrito;
+            this.direccion = alumno.direccion;
             this.telefono = alumno.telefono;
             this.email = alumno.email;
-            this.fechaNacimiento = alumno.fechaNacimiento;
-            this.sexo = alumno.sexo;
         },
         guardarAlumno() {
             let alumno = {
                 codigo: this.codigo,
                 nombre: this.nombre,
-                departamento: this.departamento,
-                municipio: this.municipio,
-                distrito: this.distrito,
+                direccion: this.direccion,
                 telefono: this.telefono,
-                email: this.email,
-                fechaNacimiento: this.fechaNacimiento,
-                sexo: this.sexo
+                email: this.email
             };
-            localStorage.setItem(this.codigo, JSON.stringify(alumno));
+            if (this.accion == 'modificar') {
+                alumno.idAlumno = this.idAlumno;
+            }
+            db.alumnos.put(alumno);
+            this.nuevoAlumno();
             this.listarAlumnos();
         },
-        listarAlumnos() {
-            this.alumnos = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                let clave = localStorage.key(i),
-                    valor = localStorage.getItem(clave);
-                this.alumnos.push(JSON.parse(valor));
-            }
+        async listarAlumnos() {
+            this.alumnos = await db.alumnos.where(this.buscarTipo).startsWithIgnoreCase(this.buscar).toArray();
+            /*this.alumnos = await db.alumnos.filter(alumno =>{
+                return alumno.nombre.toLowerCase().startsWith(this.buscar.toLowerCase()) || 
+                    alumno.codigo.toLowerCase().startsWith(this.buscar.toLowerCase());
+            }).toArray();*/
+
+        },
+        nuevoAlumno() {
+            this.accion = 'nuevo';
+            this.idAlumno = '';
+            this.codigo = '';
+            this.nombre = '';
+            this.direccion = '';
+            this.telefono = '';
+            this.email = '';
         }
     },
     created() {
+        db.version(1).stores({
+            alumnos: '++idAlumno, codigo, nombre, direccion, telefono, email'
+        });
         this.listarAlumnos();
     }
 }).mount('#app');
