@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PARCIAL I</title>
+    <title>Mi primera aplicacion con HTML + CSS + JS</title>
     <!-- CSS -->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css" />
     <!-- Default theme -->
@@ -22,7 +22,7 @@
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="#">
-                        <img width="150" src="img/logo.png.jpeg" alt="Logo">
+                        <img width="150" src="img/logo.png.jpeg" alt="Logo UGB">
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
                         aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,7 +34,7 @@
                                 <a class="nav-link" @click="abrirFormulario('autor')" href="#">Autor</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" @click="abrirFormulario('libros')" href="#">Libros</a>
+                                <a class="nav-link" @click="abrirFormulario('libro')" href="#">Libro</a>
                             </li>
                         </ul>
                     </div>
@@ -42,10 +42,10 @@
             </nav>
         </div>
         <div class="container-fluid" id="appSistema">
-            <autor v-show="forms.autor.mostrar" :forms="forms" ref="autor" @buscar="buscar('buscarAutor', 'listarAutores')"></autor>
+            <autor v-show="forms.autor.mostrar" :forms="forms" ref="autor" @buscar="buscar('buscarautor', 'listarAutores')"></autor>
             <buscarautor v-show="forms.buscarAutor.mostrar" ref="buscarautor" @modificar="modificar('autor', 'modificarAutor', $event)"></buscarautor>
-            <libros v-show="forms.libros.mostrar" :forms="forms" ref="libros" @buscar="buscar('buscarLibros', 'listarLibros')"></materia>
-            <buscarlibros v-show="forms.buscarLibros.mostrar" ref="buscarlibros" @modificar="modificar('libros', 'modificarLibros', $event)"></buscarlibros>
+            <libro v-show="forms.libro.mostrar" :forms="forms" ref="libro" @buscar="buscar('buscarlibro', 'listarLibros')"></libro>
+            <buscarlibro v-show="forms.buscarLibro.mostrar" ref="buscarlibro" @modificar="modificar('libro', 'modificarLibro', $event)"></buscarlibro>
         </div>
     </div>
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
@@ -58,5 +58,3 @@
     <script src="componentes/libros.js"></script>
     <script src="main.js"></script>
 </body>
-
-</html>

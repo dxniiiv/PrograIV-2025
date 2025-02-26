@@ -16,6 +16,7 @@ const app = createApp({
                 buscarAutor: {mostrar: false},
                 libro: {mostrar: false},
                 buscarLibro: {mostrar: false},
+                matricula: {mostrar: false},
             },
         };
     },
@@ -32,8 +33,8 @@ const app = createApp({
     },
     created() {
         db.version(1).stores({
-            alumnos: '++idAutor, codigo, nombre, telefono',
-            materias: '++idLibro, idAutor, isbn, titulo, editorial, edicion',
+            autores: '++idAutor, codigo, nombre, pais, telefono',
+            libros: '++idLibro, idAutor, isbn, titulo, editorial, edicion',
         });
     }
 });

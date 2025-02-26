@@ -1,5 +1,5 @@
     
-    const buscarautor = {
+        const buscarautor = {
     data() {
         return {
             buscar: '',
@@ -13,7 +13,7 @@
         },
         eliminarAutor(autor) {
             alertify.confirm('Eliminar Autor', `¿Esta seguro de eliminar el autor ${autor.nombre}?`, () => {
-                db.autor.delete(autor.idAutor);
+                db.autores.delete(autor.idAutor);
                 this.listarAutores();
                 alertify.success(`Autor ${autor.nombre} eliminado`);
             }, () => { });
@@ -53,14 +53,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="autor in autores" @click="modificarAutor(autor)" :key="alumno.idAutor">
+                        <tr v-for="autor in autores" @click="modificarAutor(autor)" :key="autor.idAutor">
                             <td>{{ autor.codigo }}</td>
                             <td>{{ autor.nombre }}</td>
                             <td>{{ autor.pais }}</td>
                             <td>{{ autor.telefono }}</td>
-                            <td>
                                 <button class="btn btn-danger btn-sm" 
-                                    @click.stop="eliminarAlumno(alumno)">DEL</button>
+                                    @click.stop="eliminarAutor(autor)">DEL</button>
                             </td>
                         </tr>
                     </tbody>

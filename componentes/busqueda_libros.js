@@ -1,38 +1,43 @@
     
-    const buscarLibros = {
+        const buscarlibro = {
     data() {
         return {
             buscar: '',
-            buscarTipo: 'nombre',
+            buscarTipo: 'titulo',
             libros: [],
+            autores:[]
         }
     },
     methods: {
-        modificarLibros(libros){
-            this.$emit('modificar', libros);
+        modificarLibro(libro){
+            this.$emit('modificar', libro);
         },
-        eliminarLibros(libros) {
-            alertify.confirm('Eliminar Libro', `¿Esta seguro de eliminar el libro ${libros.nombre}?`, () => {
-                db.libros.delete(libros.idLibro);
+        eliminarLibro(libro) {
+            alertify.confirm('Eliminar Libro', `¿Esta seguro de eliminar el libro ${libro.nombre}?`, () => {
+                db.libros.delete(libro.idLibro);
                 this.listarLibros();
-                alertify.success(`Libros ${libros.isbn} eliminado`);
+                alertify.success(`Libro ${libro.nombre} eliminado`);
             }, () => { });
         },
         async listarLibros() {
-            this.libros = await db.libros.filter(libros => libros[this.buscarTipo].toLowerCase().includes(this.buscar.toLowerCase())).toArray();
+            this.libros = await db.libros.filter(libro => libro[this.buscarTipo].toLowerCase().includes(this.buscar.toLowerCase())).toArray();
+        },
+        async cargarAutores() {
+                this.autores = await db.autores.toArray();
         },
         nuevoLibro() {
             this.accion = 'nuevo';
             this.idLibro = '';
-            this.idAutores = '';
-            this.isbn = '';
-            this.titulo = '';
-            this.editorial = '';
-            this.edicion = '';
+            this.idAutor = '';
+            this.isbn ='';
+            this.titulo ='';
+            this.editorial='';
+            this.edicion='';
         }
     },
     created() {
         this.listarLibros();
+        this.cargarAutores();
     },
     template: `
         <div class="row">
@@ -45,6 +50,7 @@
                                 <select v-model="buscarTipo" class="form-control">
                                     <option value="isbn">ISBN</option>
                                     <option value="titulo">TITULO</option>
+                                    <option value="autor">AUTOR</option>
                                     <option value="editorial">EDITORIAL</option>
                                     <option value="edicion">EDICION</option>
                                 </select>
@@ -56,20 +62,21 @@
                         <tr>
                             <th>ISBN</th>
                             <th>TITULO</th>
-                            <th>EDITORIAL</th>  
-                            <th>EDICION</th>  
-                            <th></th>
+                            <th>AUTOR</th>
+                            <th>EDITORIAL</th>
+                            <th>EDICION</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="libro in libros" @click="modificarLibros(libro)" :key="materia.idLibro">
+                        <tr v-for="libro in libros" @click="modificarLibro(libro)" :key="libro.idLibro">
                             <td>{{ libro.isbn }}</td>
                             <td>{{ libro.titulo }}</td>
+                            <td>{{ this.autores[libro.idAutor].nombre }}</td>
                             <td>{{ libro.editorial }}</td>
                             <td>{{ libro.edicion }}</td>
                             <td>
                                 <button class="btn btn-danger btn-sm" 
-                                    @click.stop="eliminarLibros(libro)">DEL</button>
+                                    @click.stop="eliminarLibro(libro)">DEL</button>
                             </td>
                         </tr>
                     </tbody>

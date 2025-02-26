@@ -8,7 +8,7 @@
             codigo: '',
             nombre: '',
             pais: '',
-            telefono: ''
+            telefono: '',
         }
     },
     methods: {
@@ -18,11 +18,11 @@
         },
         modificarAutor(autor) {
             this.accion = 'modificar';
-            this.idAutor = alumno.idAlumno;
-            this.codigo = alumno.codigo;
-            this.nombre = alumno.nombre;
-            this.pais = alumno.pais;
-            this.telefono = alumno.telefono;
+            this.idAutor = autor.idAutor;
+            this.codigo = autor.codigo;
+            this.nombre = autor.nombre;
+            this.pais = autor.pais;
+            this.telefono = autor.telefono;
         },
         guardarAutor() {
             let autor = {
@@ -34,7 +34,7 @@
             if (this.accion == 'modificar') {
                 autor.idAutor = this.idAutor;
             }
-            db.autor.put(autor);
+            db.autores.put(autor);
             this.nuevoAutor();
         },
         nuevoAutor() {
